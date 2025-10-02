@@ -1,12 +1,15 @@
 import Image from "next/image";
-import { SlidingNumber } from "@/components/animate-ui/primitives/texts/sliding-number";
+//import { SlidingNumber } from "@/components/animate-ui/primitives/texts/sliding-number";
 import { HexagonBackground } from "@/components/animate-ui/components/backgrounds/hexagon";
+import Content from "@/secciones/content";
+import Header from "@/secciones/header";
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 ">
+      <Header />
+      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start ">
         <HexagonBackground className="absolute inset-0 flex items-center justify-center rounded-xl" />
-        <SlidingNumber number={150} />
+        <Content />
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center relative z-10">
         <a
