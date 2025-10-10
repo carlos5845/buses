@@ -1,18 +1,21 @@
 import { createClient } from "@/utils/supabase/server";
-
+import { redirect } from "next/navigation";
+import SignOutButton from "@/secciones/components/SignOutButton";
+import ChoferPage from "@/secciones/seccionchofer";
 export default async function Chofer() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return <p>Acceso denegado. Debes iniciar sesión.</p>;
+    redirect("/Auth/login");
   }
 
   return (
     <div>
-      🚍 Página del chofer, bienvenido {user.email}
-      <div></div>
+      <div>
+        <ChoferPage />
+      </div>
     </div>
   );
 }
