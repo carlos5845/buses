@@ -55,12 +55,8 @@ export default function BusesPage() {
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 bg-muted">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Mis Buses</h1>
-        <Button onClick={() => router.push("/chofer/bus/new")}>
-          Registrar Bus
-        </Button>
+        <h1 className="text-2xl font-bold">Mi Bus</h1>
       </div>
-
       {loading ? (
         <p>Cargando buses...</p>
       ) : buses.length === 0 ? (
