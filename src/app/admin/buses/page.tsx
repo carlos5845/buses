@@ -216,20 +216,28 @@ export default function AdminBusesPage() {
   const availableBuses = buses.filter((bus) => !bus.driver_id);
 
   return (
-    <div className="max-w-6xl mx-auto mt-10 p-6">
-      <div className="flex justify-between items-center mb-6">
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold mb-2">Gestión de Buses</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+            Gestión de Buses
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400">
             Administra las asignaciones de buses a los choferes
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Link href="/chofer/bus/new">
-            <Button>Registrar Nuevo Bus</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
+              Registrar Nuevo Bus
+            </Button>
           </Link>
           {assignedBuses.length > 0 && (
-            <Button variant="destructive" onClick={handleResetAll}>
+            <Button
+              variant="destructive"
+              onClick={handleResetAll}
+              className="dark:bg-red-700 dark:hover:bg-red-800"
+            >
               Liberar Todos los Buses
             </Button>
           )}
@@ -239,22 +247,22 @@ export default function AdminBusesPage() {
       {/* Buses Asignados */}
       {assignedBuses.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Buses Asignados ({assignedBuses.length})
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {assignedBuses.map((bus) => (
-              <Card key={bus.id} className="border-orange-200">
+              <Card
+                key={bus.id}
+                className="border-orange-200 dark:border-orange-900/50 bg-white dark:bg-gray-800"
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                       <Bus className="w-5 h-5" />
                       Unidad {bus.unit_number}
                     </CardTitle>
-                    <Badge
-                      variant="outline"
-                      className="bg-orange-50 text-orange-700"
-                    >
+                    <Badge className="bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-200 border-orange-200 dark:border-orange-800">
                       Asignado
                     </Badge>
                   </div>
@@ -262,27 +270,37 @@ export default function AdminBusesPage() {
                 <CardContent className="space-y-3">
                   {bus.route && (
                     <div>
-                      <p className="text-sm text-muted-foreground">Ruta</p>
-                      <p className="font-medium">{bus.route}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Ruta
+                      </p>
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {bus.route}
+                      </p>
                     </div>
                   )}
                   <div>
-                    <p className="text-sm text-muted-foreground">Capacidad</p>
-                    <p className="font-medium">{bus.capacity} pasajeros</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Capacidad
+                    </p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {bus.capacity} pasajeros
+                    </p>
                   </div>
                   {bus.driver_email && (
                     <div>
-                      <p className="text-sm text-muted-foreground flex items-center gap-1">
+                      <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
                         <User className="w-3 h-3" />
                         Chofer
                       </p>
-                      <p className="font-medium text-sm">{bus.driver_email}</p>
+                      <p className="font-medium text-sm text-gray-900 dark:text-white">
+                        {bus.driver_email}
+                      </p>
                     </div>
                   )}
                   <Button
                     variant="destructive"
                     size="sm"
-                    className="w-full mt-4"
+                    className="w-full mt-4 dark:bg-red-700 dark:hover:bg-red-800"
                     onClick={() => handleUnassignBus(bus.id)}
                   >
                     <X className="w-4 h-4 mr-2" />
@@ -297,18 +315,18 @@ export default function AdminBusesPage() {
 
       {/* Buses Disponibles */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
           Buses Disponibles ({availableBuses.length})
         </h2>
         {availableBuses.length === 0 ? (
-          <Card className="p-6">
+          <Card className="p-6 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-6 h-6 text-muted-foreground flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-6 h-6 text-gray-400 dark:text-gray-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-lg font-bold mb-2">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                   No hay buses disponibles
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-gray-600 dark:text-gray-400">
                   Todos los buses están asignados. Desasigna algunos para que
                   los choferes puedan seleccionarlos.
                 </p>
@@ -318,17 +336,17 @@ export default function AdminBusesPage() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {availableBuses.map((bus) => (
-              <Card key={bus.id} className="border-green-200">
+              <Card
+                key={bus.id}
+                className="border-green-200 dark:border-green-900/50 bg-white dark:bg-gray-800"
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
+                    <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
                       <Bus className="w-5 h-5" />
                       Unidad {bus.unit_number}
                     </CardTitle>
-                    <Badge
-                      variant="outline"
-                      className="bg-green-50 text-green-700"
-                    >
+                    <Badge className="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-200 border-green-200 dark:border-green-800">
                       Disponible
                     </Badge>
                   </div>
@@ -336,18 +354,30 @@ export default function AdminBusesPage() {
                 <CardContent className="space-y-3">
                   {bus.route && (
                     <div>
-                      <p className="text-sm text-muted-foreground">Ruta</p>
-                      <p className="font-medium">{bus.route}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Ruta
+                      </p>
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {bus.route}
+                      </p>
                     </div>
                   )}
                   <div>
-                    <p className="text-sm text-muted-foreground">Capacidad</p>
-                    <p className="font-medium">{bus.capacity} pasajeros</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Capacidad
+                    </p>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {bus.capacity} pasajeros
+                    </p>
                   </div>
                   {bus.schedule && (
                     <div>
-                      <p className="text-sm text-muted-foreground">Horario</p>
-                      <p className="font-medium">{bus.schedule}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Horario
+                      </p>
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {bus.schedule}
+                      </p>
                     </div>
                   )}
                 </CardContent>

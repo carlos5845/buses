@@ -200,14 +200,14 @@ export default function SelectBusPage() {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto mt-10 p-6">
+      <div className="w-full px-6 py-8">
         <p>Cargando buses disponibles...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6">
+    <div className="w-full px-6 py-8">
       <div className="mb-6">
         <h1 className="text-3xl font-bold mb-2">Seleccionar Bus</h1>
         <p className="text-muted-foreground">

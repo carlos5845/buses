@@ -1,6 +1,9 @@
+"use client";
+
 import { ExternalLink } from "@/components/animate-ui/icons/external-link";
 import { AnimateIcon } from "@/components/animate-ui/icons/icon";
 import Link from "next/link";
+import { ThemeTogglerDemo } from "@/components/theme-toggler";
 export default function Header() {
   return (
     <header className=" z-40 backdrop-blur  ml-auto mr-auto ">
@@ -73,9 +76,10 @@ export default function Header() {
             </button>
 */}
 
+            <ThemeTogglerDemo direction="ltr" />
             <Link
               href="Auth/login"
-              className="inline-flex items-center gap-2 rounded-full bg-white text-gray-900 px-3 py-2 text-sm font-medium hover:bg-gray-100 transition font-sans"
+              className="inline-flex items-center gap-2 rounded-2xl bg-white text-gray-900 px-3 py-2 text-sm font-medium hover:bg-gray-100 transition font-sans dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
             >
               <AnimateIcon animateOnHover>
                 <ExternalLink width={20} />

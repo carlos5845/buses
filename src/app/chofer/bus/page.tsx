@@ -65,7 +65,7 @@ export default function BusesPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-muted">
+    <div className=" mx-auto mt-10 p-6 ">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Mi Bus</h1>
       </div>

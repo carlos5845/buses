@@ -166,7 +166,7 @@ export default function Content() {
                 activeBuses.map((bus) => (
                   <Card
                     key={bus.id}
-                    className="hover:shadow-md transition-shadow border-l-2 gap-3"
+                    className="hover:shadow-md transition-shadow border-l-2 gap-3 dark:bg-gray-900 bg-white"
                     style={{
                       borderLeftColor: bus.isActive
                         ? "rgb(34, 197, 94)"
@@ -190,7 +190,7 @@ export default function Content() {
         ${
           bus.isActive
             ? "bg-green-50 text-green-700 border-green-200"
-            : "bg-slate-100 text-slate-500 border-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600"
+            : "bg-slate-100 text-slate-500 border-slate-300 dark:bg-slate-600 dark:text-slate-300 dark:border-slate-600"
         }`}
                         >
                           <span className="relative flex h-2 w-2">

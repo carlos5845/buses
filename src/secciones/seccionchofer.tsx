@@ -146,8 +146,8 @@ export default function ChoferPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-muted from-background to-primary/5 p-4 flex items-center justify-center">
-        <p>Cargando...</p>
+      <div className=" p-4 flex items-center justify-center">
+        <p className="font-bold ">Cargando...</p>
       </div>
     );
   }
@@ -159,7 +159,7 @@ export default function ChoferPage() {
   const busId = busInfo?.id || null;
 
   return (
-    <div className="min-h-screen bg-muted from-background to-primary/5 p-4">
+    <div className="  p-4">
       <div className="max-w-2xl mx-auto pt-8 space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
@@ -262,7 +262,6 @@ export default function ChoferPage() {
                 ⚙️ Admin
               </Link>
             )}
-            <SignOutButton />
           </div>
         </div>
       </div>

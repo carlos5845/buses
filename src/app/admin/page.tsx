@@ -48,7 +48,7 @@ export default function AdminPage() {
 
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-muted p-4 flex items-center justify-center">
+      <div className="min-h-screen p-4 flex items-center justify-center">
         <Card className="p-6 max-w-md">
           <div className="flex items-start gap-3">
             <AlertCircle className="w-6 h-6 text-destructive flex-shrink-0 mt-0.5" />
@@ -67,7 +67,7 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-muted p-4">
+    <div className="muted p-4">
       <div className="max-w-6xl mx-auto pt-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Panel de Administración</h1>
@@ -145,4 +145,3 @@ export default function AdminPage() {
     </div>
   );
 }
-

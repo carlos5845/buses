@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import SignOutButton from "@/secciones/components/SignOutButton";
+
 import ChoferPage from "@/secciones/seccionchofer";
 export default async function Chofer() {
   const supabase = await createClient();

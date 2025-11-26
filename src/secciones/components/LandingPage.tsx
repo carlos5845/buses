@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
 import { MapPin, Bus, Clock, Shield, ArrowRight } from "lucide-react";
 import { useEffect, useRef } from "react";
-
+import { Button } from "@/components/ui/button";
 interface LandingPageProps {
   onViewMap: () => void;
 }
@@ -130,9 +130,10 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
               Ver Mapa en Tiempo Real
             </RainbowButton>
           </button>
-          <button onClick={onViewMap}>
-            <RainbowButton size={"lg"}>Explorar Rutas</RainbowButton>
-          </button>
+
+          <Button onClick={onViewMap} size={"lg"}>
+            Explorar Rutas
+          </Button>
         </div>
 
         {/* Características destacadas */}
