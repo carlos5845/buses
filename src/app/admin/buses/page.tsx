@@ -62,7 +62,9 @@ export default function AdminBusesPage() {
     // Obtener todos los buses con información del chofer si está asignado
     const { data, error } = await supabase
       .from("buses")
-      .select("id, unit_number, route, capacity, schedule, is_available, driver_id")
+      .select(
+        "id, unit_number, route, capacity, schedule, is_available, driver_id"
+      )
       .order("unit_number", { ascending: true });
 
     if (error) {
@@ -88,7 +90,10 @@ export default function AdminBusesPage() {
             const { data, error } = await supabase.rpc("get_driver_email", {
               driver_id: id,
             });
-            return [id, data || `ID: ${id.substring(0, 8)}...`] as [string, string];
+            return [id, data || `ID: ${id.substring(0, 8)}...`] as [
+              string,
+              string
+            ];
           });
 
           const emailResults = await Promise.all(emailPromises);
@@ -165,7 +170,10 @@ export default function AdminBusesPage() {
         driver_id: null,
         is_available: true,
       })
-      .in("id", assignedBuses.map((b) => b.id));
+      .in(
+        "id",
+        assignedBuses.map((b) => b.id)
+      );
 
     if (error) {
       console.error("Error al resetear buses:", error);
@@ -243,7 +251,10 @@ export default function AdminBusesPage() {
                       <Bus className="w-5 h-5" />
                       Unidad {bus.unit_number}
                     </CardTitle>
-                    <Badge variant="outline" className="bg-orange-50 text-orange-700">
+                    <Badge
+                      variant="outline"
+                      className="bg-orange-50 text-orange-700"
+                    >
                       Asignado
                     </Badge>
                   </div>
@@ -314,7 +325,10 @@ export default function AdminBusesPage() {
                       <Bus className="w-5 h-5" />
                       Unidad {bus.unit_number}
                     </CardTitle>
-                    <Badge variant="outline" className="bg-green-50 text-green-700">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700"
+                    >
                       Disponible
                     </Badge>
                   </div>
@@ -345,4 +359,3 @@ export default function AdminBusesPage() {
     </div>
   );
 }
-

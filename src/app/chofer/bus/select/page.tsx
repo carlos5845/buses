@@ -36,14 +36,21 @@ export default function SelectBusPage() {
     // Obtener buses disponibles (sin chofer asignado)
     const { data, error } = await supabase
       .from("buses")
-      .select("id, unit_number, route, capacity, schedule, is_available, driver_id")
+      .select(
+        "id, unit_number, route, capacity, schedule, is_available, driver_id"
+      )
       .eq("is_available", true)
       .is("driver_id", null)
       .order("unit_number", { ascending: true });
 
     if (error) {
       console.error("Error cargando buses:", error);
-      console.error("Detalles del error:", error.message, error.details, error.hint);
+      console.error(
+        "Detalles del error:",
+        error.message,
+        error.details,
+        error.hint
+      );
       alert(`Error al cargar buses: ${error.message}`);
     } else {
       console.log("Buses disponibles encontrados:", data);
@@ -76,7 +83,7 @@ export default function SelectBusPage() {
             console.log("Evento:", payload.eventType);
             console.log("Nuevo:", payload.new);
             console.log("Anterior:", payload.old);
-            
+
             // Recargar buses disponibles cuando hay cambios
             if (mounted) {
               console.log("Recargando lista de buses disponibles...");
@@ -139,10 +146,10 @@ export default function SelectBusPage() {
 
       if (error) {
         console.error("Error al seleccionar bus:", error);
-        
+
         // Si la función RPC no existe o falla, usar el método anterior como fallback
         console.log("Intentando método alternativo...");
-        
+
         // Primero, liberar cualquier bus que el chofer tenga asignado previamente
         const { error: releaseError } = await supabase
           .from("buses")
@@ -174,16 +181,18 @@ export default function SelectBusPage() {
       }
 
       console.log("Bus seleccionado correctamente, esperando actualización...");
-      
+
       // Esperar un momento para que la suscripción en tiempo real se actualice
       await new Promise((resolve) => setTimeout(resolve, 500));
-      
+
       // Redirigir al panel del chofer
       router.push("/chofer");
       router.refresh();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error inesperado:", err);
-      alert(`Error: ${err.message || "Intenta nuevamente"}`);
+      const errorMessage =
+        err instanceof Error ? err.message : "Intenta nuevamente";
+      alert(`Error: ${errorMessage}`);
     } finally {
       setSelecting(null);
     }
@@ -231,7 +240,10 @@ export default function SelectBusPage() {
                     <Bus className="w-5 h-5" />
                     Unidad {bus.unit_number}
                   </CardTitle>
-                  <Badge variant="outline" className="bg-green-50 text-green-700">
+                  <Badge
+                    variant="outline"
+                    className="bg-green-50 text-green-700"
+                  >
                     Disponible
                   </Badge>
                 </div>
@@ -258,7 +270,9 @@ export default function SelectBusPage() {
                   onClick={() => handleSelectBus(bus.id)}
                   disabled={selecting === bus.id}
                 >
-                  {selecting === bus.id ? "Seleccionando..." : "Seleccionar Bus"}
+                  {selecting === bus.id
+                    ? "Seleccionando..."
+                    : "Seleccionar Bus"}
                 </Button>
               </CardContent>
             </Card>
@@ -268,4 +282,3 @@ export default function SelectBusPage() {
     </div>
   );
 }
-

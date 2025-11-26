@@ -47,7 +47,7 @@ export default function NewBusPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!isAdmin) {
       alert("Solo los administradores pueden registrar buses.");
       return;
@@ -75,9 +75,11 @@ export default function NewBusPage() {
         alert("Bus registrado correctamente ✅");
         router.push("/chofer/bus"); // volver al listado
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error inesperado:", err);
-      alert(`Error inesperado: ${err.message || "Intenta nuevamente"}`);
+      const errorMessage =
+        err instanceof Error ? err.message : "Intenta nuevamente";
+      alert(`Error inesperado: ${errorMessage}`);
     } finally {
       setSubmitting(false);
     }

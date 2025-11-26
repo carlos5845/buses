@@ -3,16 +3,13 @@
 import { RainbowButton } from "@/components/ui/rainbow-button";
 import { RetroGrid } from "@/components/ui/retro-grid";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
+import {
+  ScrollVelocityContainer,
+  ScrollVelocityRow,
+} from "@/components/ui/scroll-based-velocity";
 import { cn } from "@/lib/utils";
 import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import {
-  MapPin,
-  Bus,
-  Clock,
-  Shield,
-  ArrowDown,
-  ArrowRight,
-} from "lucide-react";
+import { MapPin, Bus, Clock, Shield, ArrowRight } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface LandingPageProps {
@@ -88,10 +85,10 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       id="landing"
       className="relative min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
-      {/* Fondo con gradientes animados */}
-      <div className="absolute inset-0 "></div>
+      {/* Fondo con gradientes animados 
+        <div className="absolute inset-0 "></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(139,92,246,0.1),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(139,92,246,0.1),transparent_50%)]"></div>*/}
 
       {/* RetroGrid Fondo */}
       <div className="absolute inset-0 z-0">
@@ -99,7 +96,7 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       </div>
 
       {/* Contenido principal */}
-      <div className="relative z-10 max-w-6xl mx-auto text-center space-y-8 py-20">
+      <div className="relative z-10 max-w-6xl mx-auto text-center space-y-8 py-8">
         {/* Título principal */}
         <div className="animate-fade-in">
           <div className="z-10 flex  items-center justify-center">
@@ -145,40 +142,18 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
           ))}
         </BentoGrid>
 
-        {/* Estadísticas rápidas */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-3xl mx-auto">
-          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4">
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
-              24/7
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Monitoreo
-            </div>
-          </div>
-          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4">
-            <div className="text-3xl font-bold text-green-600 dark:text-green-400">
-              <Clock className="w-8 h-8 mx-auto" />
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Tiempo Real
-            </div>
-          </div>
-          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4">
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-              100%
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Precisión
-            </div>
-          </div>
-          <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-4">
-            <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
-              GPS
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-              Tecnología
-            </div>
-          </div>
+        {/* Estadísticas rápidas con scroll de texto */}
+        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-12">
+          <ScrollVelocityContainer className="text-4xl font-bold tracking-[-0.02em] md:text-7xl md:leading-[5rem]">
+            <ScrollVelocityRow baseVelocity={5} direction={1}>
+              Sistema de Rastreo • Buses en Tiempo Real •
+            </ScrollVelocityRow>
+            <ScrollVelocityRow baseVelocity={5} direction={-1}>
+              GPS Avanzado • Monitoreo 24/7 •
+            </ScrollVelocityRow>
+          </ScrollVelocityContainer>
+          <div className="from-background pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r"></div>
+          <div className="from-background pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l"></div>
         </div>
       </div>
     </section>

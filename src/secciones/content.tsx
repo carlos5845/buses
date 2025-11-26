@@ -1,17 +1,11 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import MapView from "./mapview";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-
+import { MapPin, Users, Clock } from "lucide-react";
+import { RollingText } from "@/components/animate-ui/primitives/texts/rolling";
 type ActiveBus = {
   id: string;
   unit_number: string;
@@ -130,7 +124,7 @@ export default function Content() {
   };
 
   return (
-    <section className="relative overflow-hidden max-w-7xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 border border-gray-200 dark:border-gray-800 rounded-3xl mt-8 mr-auto ml-auto w-full shadow-xl">
+    <section className="relative overflow-hidden max-w-7xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 border border-gray-200 dark:border-gray-800 rounded-3xl mt-2 mr-auto ml-auto w-full shadow-xl">
       {/* Contenedor principal */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6 max-w-7xl w-full">
         {/* Mapa - Ocupa 3 columnas en pantallas grandes */}
@@ -142,9 +136,10 @@ export default function Content() {
         <div className="lg:col-span-1 space-y-4">
           <div className="sticky top-6">
             <div className="mb-4">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                Buses Activos
-              </h2>
+              <RollingText
+                className="text-3xl font-semibold"
+                text="Buses Activos"
+              />
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {loading
                   ? "Cargando..."
@@ -171,45 +166,81 @@ export default function Content() {
                 activeBuses.map((bus) => (
                   <Card
                     key={bus.id}
-                    className="hover:shadow-md transition-shadow border-l-4"
+                    className="hover:shadow-md transition-shadow border-l-2 gap-3"
                     style={{
                       borderLeftColor: bus.isActive
                         ? "rgb(34, 197, 94)"
                         : "rgb(156, 163, 175)",
                     }}
                   >
-                    <CardHeader className="pb-3">
+                    {/* Header */}
+                    <div className="px-4 pb-0">
+                      {" "}
+                      {/* antes pb-3 */}
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-                            Bus {bus.unit_number}
-                          </CardTitle>
-                          {bus.route && (
-                            <CardDescription className="mt-1 text-sm">
-                              Ruta: {bus.route}
-                            </CardDescription>
-                          )}
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            Bus - {bus.unit_number}
+                          </h3>
                         </div>
-                        <Badge
-                          variant={bus.isActive ? "default" : "secondary"}
-                          className={
-                            bus.isActive
-                              ? "bg-green-500 hover:bg-green-600"
-                              : "bg-gray-400"
-                          }
+
+                        {/* Badge */}
+                        <div
+                          className={`flex items-center gap-1.5 border h-6 shadow-none px-2 rounded-md text-xs
+        ${
+          bus.isActive
+            ? "bg-green-50 text-green-700 border-green-200"
+            : "bg-slate-100 text-slate-500 border-slate-300 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600"
+        }`}
                         >
+                          <span className="relative flex h-2 w-2">
+                            {bus.isActive && (
+                              <span className="absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75 animate-pulse"></span>
+                            )}
+                            <span
+                              className={`relative inline-flex rounded-full h-2 w-2 ${
+                                bus.isActive
+                                  ? "bg-green-600"
+                                  : "bg-slate-400 dark:bg-slate-500"
+                              }`}
+                            ></span>
+                          </span>
+
                           {bus.isActive ? "Activo" : "Inactivo"}
-                        </Badge>
+                        </div>
                       </div>
-                    </CardHeader>
-                    <CardContent className="pt-0">
-                      <div className="flex items-center justify-between text-xs text-gray-600 dark:text-gray-400">
-                        <span>Capacidad: {bus.capacity} pasajeros</span>
-                        <span className="font-medium">
+                      {bus.route && (
+                        <div className="flex items-center gap-2 mt-2 bg-slate-50 dark:bg-slate-800 p-1.5 rounded border border-slate-100 dark:border-slate-700 w-full">
+                          <MapPin className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 shrink-0" />
+                          <span
+                            className="text-xs font-medium text-slate-700 dark:text-slate-300 truncate w-full"
+                            title={bus.route}
+                          >
+                            {bus.route}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="px-4 pb-2 ">
+                      {" "}
+                      {/* antes pt-0 */}
+                      <div className="flex items-center justify-between border-t border-slate-100 dark:border-slate-700 pt-2">
+                        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+                          <Users className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
+                          <span className="font-semibold text-slate-900 dark:text-white">
+                            Capacidad: {bus.capacity}
+                          </span>
+                        </div>
+
+                        <span className="flex items-center gap-1 text-[10px] font-medium text-slate-400 dark:text-slate-500">
+                          <Clock className="w-3 h-3" />
+
                           {formatTimeAgo(bus.lastUpdate)}
                         </span>
                       </div>
-                    </CardContent>
+                    </div>
                   </Card>
                 ))
               )}

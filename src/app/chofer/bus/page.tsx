@@ -6,8 +6,19 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface Bus {
+  id: string;
+  unit_number: string;
+  route: string | null;
+  capacity: number;
+  driver_id: string | null;
+  is_available: boolean;
+  schedule?: string | null;
+  [key: string]: unknown;
+}
+
 export default function BusesPage() {
-  const [buses, setBuses] = useState<any[]>([]);
+  const [buses, setBuses] = useState<Bus[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const supabase = createClient();
@@ -38,6 +49,7 @@ export default function BusesPage() {
 
   useEffect(() => {
     fetchBuses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDelete = async (id: string) => {

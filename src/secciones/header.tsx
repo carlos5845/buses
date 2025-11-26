@@ -3,10 +3,10 @@ import { AnimateIcon } from "@/components/animate-ui/icons/icon";
 import Link from "next/link";
 export default function Header() {
   return (
-    <header className=" z-40 backdrop-blur supports-[backdrop-filter]:bg-gray-900/70 bg-gray-900/60 border-t border-gray-800 max-w-7xl ml-auto mr-auto rounded-full w-full">
-      <div className="max-w-7xl mr-auto ml-auto pr-6 pl-6">
-        <div className="h-16 flex items-center justify-between">
-          <a href="#" className="flex items-center gap-0">
+    <header className=" z-40 backdrop-blur  ml-auto mr-auto ">
+      <div className="w-full mr-auto ml-auto pr-6 pl-6 max-w-7xl">
+        <div className="h-16 flex items-center justify-between max-w-7xl">
+          <a href="" className="flex items-center gap-0">
             <svg
               className="md:w-14 md:h-14 w-[36px] h-[36px]"
               viewBox="0 0 48 48"
@@ -28,14 +28,7 @@ export default function Header() {
               Bus Traker
             </span>
           </a>
-          <nav className="hidden md:flex items-center gap-8 text-sm">
-            <a
-              href="#docs"
-              className="text-gray-400 hover:text-gray-200 font-sans"
-            >
-              Docs
-            </a>
-          </nav>
+          <nav className="hidden md:flex items-center gap-8 text-sm"></nav>
           <div className="flex items-center gap-3">
             {/* 
 
@@ -60,18 +53,7 @@ export default function Header() {
     </svg>
     Acceso como chofer
   </a>
-*/}
-
-            <Link
-              href="Auth/login"
-              className="inline-flex items-center gap-2 rounded-full bg-white text-gray-900 px-4 py-2.5 text-sm font-medium hover:bg-gray-100 transition font-sans"
-            >
-              <AnimateIcon animateOnHover>
-                <ExternalLink width={20} />
-              </AnimateIcon>
-              Acceso como chofer
-            </Link>
-            <button className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border border-gray-800 bg-gray-900/50 hover:bg-gray-800">
+   <button className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border border-gray-800 bg-gray-900/50 hover:bg-gray-800">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -89,6 +71,17 @@ export default function Header() {
                 <path d="M4 6h16"></path>
               </svg>
             </button>
+*/}
+
+            <Link
+              href="Auth/login"
+              className="inline-flex items-center gap-2 rounded-full bg-white text-gray-900 px-3 py-2 text-sm font-medium hover:bg-gray-100 transition font-sans"
+            >
+              <AnimateIcon animateOnHover>
+                <ExternalLink width={20} />
+              </AnimateIcon>
+              Acceso como chofer
+            </Link>
           </div>
         </div>
       </div>
