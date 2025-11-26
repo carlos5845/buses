@@ -3,7 +3,7 @@ import { AnimateIcon } from "@/components/animate-ui/icons/icon";
 import Link from "next/link";
 export default function Header() {
   return (
-    <header className="sticky top-4 z-40 backdrop-blur supports-[backdrop-filter]:bg-gray-900/70 bg-gray-900/60 border-t border-gray-800 max-w-7xl ml-auto mr-auto rounded-full w-full">
+    <header className=" z-40 backdrop-blur supports-[backdrop-filter]:bg-gray-900/70 bg-gray-900/60 border-t border-gray-800 max-w-7xl ml-auto mr-auto rounded-full w-full">
       <div className="max-w-7xl mr-auto ml-auto pr-6 pl-6">
         <div className="h-16 flex items-center justify-between">
           <a href="#" className="flex items-center gap-0">
