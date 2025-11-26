@@ -67,6 +67,8 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
   ];
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       if (scrollIndicatorRef.current) {
         const scrolled = window.scrollY;

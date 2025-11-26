@@ -122,18 +122,26 @@ function ScrollVelocityRowImpl({
     })
     handleVisibility()
 
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
-    const handlePRM = () => {
-      prefersReducedMotionRef.current = mq.matches
+    if (typeof window !== 'undefined') {
+      const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+      const handlePRM = () => {
+        prefersReducedMotionRef.current = mq.matches
+      }
+      mq.addEventListener("change", handlePRM)
+      handlePRM()
+
+      return () => {
+        ro.disconnect()
+        io.disconnect()
+        document.removeEventListener("visibilitychange", handleVisibility)
+        mq.removeEventListener("change", handlePRM)
+      }
     }
-    mq.addEventListener("change", handlePRM)
-    handlePRM()
 
     return () => {
       ro.disconnect()
       io.disconnect()
       document.removeEventListener("visibilitychange", handleVisibility)
-      mq.removeEventListener("change", handlePRM)
     }
   }, [children, unitWidth])
 

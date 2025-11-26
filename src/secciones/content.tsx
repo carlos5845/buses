@@ -1,11 +1,13 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import MapView from "./mapview";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { MapPin, Users, Clock } from "lucide-react";
 import { RollingText } from "@/components/animate-ui/primitives/texts/rolling";
+
+const MapView = dynamic(() => import("./mapview"), { ssr: false });
 type ActiveBus = {
   id: string;
   unit_number: string;

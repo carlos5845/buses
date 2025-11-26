@@ -32,12 +32,14 @@ function HexagonBackground({
   });
 
   const updateGridDimensions = React.useCallback(() => {
+    if (typeof window === 'undefined') return;
     const rows = Math.ceil(window.innerHeight / rowSpacing);
     const columns = Math.ceil(window.innerWidth / hexagonWidth) + 1;
     setGridDimensions({ rows, columns });
   }, [rowSpacing, hexagonWidth]);
 
   React.useEffect(() => {
+    if (typeof window === 'undefined') return;
     updateGridDimensions();
     window.addEventListener('resize', updateGridDimensions);
     return () => window.removeEventListener('resize', updateGridDimensions);

@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
-import SignOutButton from "./components/SignOutButton";
 import DriverTracker from "./components/DriverTracker";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

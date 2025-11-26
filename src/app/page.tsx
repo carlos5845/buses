@@ -5,13 +5,12 @@ import LandingPage from "@/secciones/components/LandingPage";
 import Content from "@/secciones/content";
 import Header from "@/secciones/header";
 import { useRef } from "react";
-import { Globe } from "@/components/ui/globe";
 
 export default function Home() {
   const mapSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToMap = () => {
-    if (mapSectionRef.current) {
+    if (mapSectionRef.current && typeof window !== 'undefined') {
       const headerOffset = 100; // Altura del header + margen
       const elementPosition = mapSectionRef.current.getBoundingClientRect().top;
       const offsetPosition =
@@ -38,9 +37,7 @@ export default function Home() {
       >
         <Content />
       </div>
-      <div>
-        
-      </div>
+      <div></div>
       {/* Footer */}
       <footer className="flex gap-[24px] flex-wrap items-center justify-center py-8 px-4 relative z-10 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
         <a

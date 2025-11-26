@@ -72,6 +72,8 @@ export function Globe({
   }
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const onResize = () => {
       if (canvasRef.current) {
         width = canvasRef.current.offsetWidth

@@ -107,6 +107,7 @@ function TooltipProvider({
 
   const showTooltip = React.useCallback(
     (data: TooltipData) => {
+      if (typeof window === 'undefined') return;
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       if (currentTooltip !== null) {
         setCurrentTooltip(data);
@@ -123,6 +124,7 @@ function TooltipProvider({
   );
 
   const hideTooltip = React.useCallback(() => {
+    if (typeof window === 'undefined') return;
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     timeoutRef.current = window.setTimeout(() => {
       setCurrentTooltip(null);
@@ -141,6 +143,8 @@ function TooltipProvider({
   }, []);
 
   React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') hideImmediate();
     };
