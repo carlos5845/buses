@@ -6,8 +6,19 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+interface Bus {
+  id: string;
+  unit_number: string;
+  route: string | null;
+  capacity: number;
+  driver_id: string | null;
+  is_available: boolean;
+  schedule?: string | null;
+  [key: string]: unknown;
+}
+
 export default function BusesPage() {
-  const [buses, setBuses] = useState<any[]>([]);
+  const [buses, setBuses] = useState<Bus[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const supabase = createClient();
@@ -38,6 +49,7 @@ export default function BusesPage() {
 
   useEffect(() => {
     fetchBuses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDelete = async (id: string) => {
@@ -53,14 +65,10 @@ export default function BusesPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-muted">
+    <div className=" mx-auto mt-10 p-6 ">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Mis Buses</h1>
-        <Button onClick={() => router.push("/chofer/bus/new")}>
-          Registrar Bus
-        </Button>
+        <h1 className="text-2xl font-bold">Mi Bus</h1>
       </div>
-
       {loading ? (
         <p>Cargando buses...</p>
       ) : buses.length === 0 ? (

@@ -1,19 +1,50 @@
+"use client";
+
 import Image from "next/image";
-//import { SlidingNumber } from "@/components/animate-ui/primitives/texts/sliding-number";
-import { HexagonBackground } from "@/components/animate-ui/components/backgrounds/hexagon";
+import LandingPage from "@/secciones/components/LandingPage";
 import Content from "@/secciones/content";
 import Header from "@/secciones/header";
+import { useRef } from "react";
+import { Globe } from "@/components/ui/globe";
+
 export default function Home() {
+  const mapSectionRef = useRef<HTMLDivElement>(null);
+
+  const scrollToMap = () => {
+    if (mapSectionRef.current) {
+      const headerOffset = 100; // Altura del header + margen
+      const elementPosition = mapSectionRef.current.getBoundingClientRect().top;
+      const offsetPosition =
+        elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20  ">
+    <div className="font-sans min-h-screen">
       <Header />
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start w-full">
-        <HexagonBackground className="absolute inset-0 flex items-center justify-center rounded-xl bg-cover" />
+      {/* Landing Page */}
+      <LandingPage onViewMap={scrollToMap} />
+
+      {/* Sección del Mapa */}
+      <div
+        ref={mapSectionRef}
+        id="map-section"
+        className="min-h-screen py-8 px-4 sm:px-6 lg:px-8"
+      >
         <Content />
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center relative z-10">
+      </div>
+      <div>
+        
+      </div>
+      {/* Footer */}
+      <footer className="flex gap-[24px] flex-wrap items-center justify-center py-8 px-4 relative z-10 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+          className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-600 dark:text-gray-400"
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
@@ -28,7 +59,7 @@ export default function Home() {
           Learn
         </a>
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+          className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-600 dark:text-gray-400"
           href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
@@ -43,7 +74,7 @@ export default function Home() {
           Examples
         </a>
         <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+          className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-600 dark:text-gray-400"
           href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"

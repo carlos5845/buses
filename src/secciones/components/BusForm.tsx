@@ -5,7 +5,20 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function BusForm({ userId, bus }) {
+interface Bus {
+  id?: string;
+  numero_unidad?: string;
+  ruta_asignada?: string;
+  capacidad?: string;
+  horario?: string;
+}
+
+interface BusFormProps {
+  userId: string;
+  bus?: Bus;
+}
+
+export default function BusForm({ userId, bus }: BusFormProps) {
   const supabase = createClient();
 
   const [form, setForm] = useState({
@@ -15,11 +28,11 @@ export default function BusForm({ userId, bus }) {
     horario: bus?.horario || "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (bus) {

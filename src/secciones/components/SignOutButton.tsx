@@ -17,7 +17,6 @@ export default function SignOutButton() {
       onClick={handleSignOut}
       className="text-muted-foreground hover:text-foreground flex"
     >
-      <LogOut />
       Cerrar sesión
     </button>
   );
