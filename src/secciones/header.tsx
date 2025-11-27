@@ -6,10 +6,10 @@ import Link from "next/link";
 import { ThemeTogglerDemo } from "@/components/theme-toggler";
 export default function Header() {
   return (
-    <header className=" z-40 backdrop-blur  ml-auto mr-auto ">
-      <div className="w-full mr-auto ml-auto pr-6 pl-6 max-w-7xl">
-        <div className="h-16 flex items-center justify-between max-w-7xl">
-          <a href="" className="flex items-center gap-0">
+    <header className="z-40 backdrop-blur w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="h-16 flex items-center justify-between">
+          <a href="" className="flex items-center gap-2">
             <svg
               className="md:w-14 md:h-14 w-[36px] h-[36px]"
               viewBox="0 0 48 48"

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { RadixSidebarDemo } from "@/components/navegation";
 
 interface LayoutSidebarProps {
@@ -8,5 +9,17 @@ interface LayoutSidebarProps {
 }
 
 export function LayoutSidebar({ children }: LayoutSidebarProps) {
-  return <RadixSidebarDemo>{children}</RadixSidebarDemo>;
+  const isMobile = useIsMobile();
+
+  return (
+    <div
+      className={
+        isMobile
+          ? "relative overflow-hidden" // permite overlay limpio en mobile
+          : "flex min-h-screen" // desktop layout normal
+      }
+    >
+      <RadixSidebarDemo>{children}</RadixSidebarDemo>
+    </div>
+  );
 }

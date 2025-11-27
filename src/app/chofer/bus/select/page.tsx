@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Bus } from "lucide-react";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 type AvailableBus = {
   id: string;
@@ -201,7 +202,7 @@ export default function SelectBusPage() {
   if (loading) {
     return (
       <div className="w-full px-6 py-8">
-        <p>Cargando buses disponibles...</p>
+        <LoadingSpinner text="Cargando buses disponibles..." />
       </div>
     );
   }

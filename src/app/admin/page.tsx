@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Card } from "@/components/ui/card";
 import { AlertCircle, Bus, Settings, Users, Radio } from "lucide-react";
 import Link from "next/link";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function AdminPage() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -40,7 +41,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-muted p-4 flex items-center justify-center">
-        <p>Cargando...</p>
+        <LoadingSpinner text="Cargando panel de administrador..." />
       </div>
     );
   }

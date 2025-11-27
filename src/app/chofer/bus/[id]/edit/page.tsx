@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function EditBusPage() {
   const { id } = useParams();
@@ -19,9 +20,34 @@ export default function EditBusPage() {
     schedule: "",
   });
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const fetchBus = async () => {
+    const fetchData = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.push("/Auth/login");
+        return;
+      }
+
+      // Verificar si es admin
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      if (profile?.role !== "admin") {
+        router.push("/chofer/bus");
+        return;
+      }
+
+      setIsAdmin(true);
+
+      // Obtener datos del bus
       const { data, error } = await supabase
         .from("buses")
         .select("*")
@@ -43,8 +69,8 @@ export default function EditBusPage() {
       setLoading(false);
     };
 
-    if (id) fetchBus();
-  }, [id, supabase]);
+    if (id) fetchData();
+  }, [id, supabase, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -66,11 +92,15 @@ export default function EditBusPage() {
     if (error) {
       console.error("Error actualizando bus:", error.message);
     } else {
-      router.push("/chofer/bus");
+      router.push("/admin/buses");
     }
   };
 
-  if (loading) return <p>Cargando datos del bus...</p>;
+  if (!isAdmin) {
+    return <p>No tienes permiso para acceder a esta página.</p>;
+  }
+
+  if (loading) return <LoadingSpinner text="Cargando datos del bus..." />;
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow">

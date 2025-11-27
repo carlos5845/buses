@@ -6,8 +6,18 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertCircle, Bus, User, X } from "lucide-react";
+import {
+  Bus,
+  Map,
+  Users,
+  User,
+  Edit,
+  Trash2,
+  AlertCircle,
+  Clock,
+} from "lucide-react";
 import Link from "next/link";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 type BusWithDriver = {
   id: string;
@@ -137,6 +147,25 @@ export default function AdminBusesPage() {
     }
   };
 
+  const handleDeleteBus = async (busId: string) => {
+    if (
+      !confirm(
+        "¿Estás seguro que deseas eliminar este bus? Esta acción no se puede deshacer."
+      )
+    )
+      return;
+
+    const { error } = await supabase.from("buses").delete().eq("id", busId);
+
+    if (error) {
+      console.error("Error al eliminar bus:", error);
+      alert(`Error: ${error.message}`);
+    } else {
+      alert("Bus eliminado correctamente ✅");
+      fetchBuses();
+    }
+  };
+
   const handleResetAll = async () => {
     if (
       !confirm(
@@ -187,7 +216,7 @@ export default function AdminBusesPage() {
   if (loading) {
     return (
       <div className="max-w-6xl mx-auto mt-10 p-6">
-        <p>Cargando...</p>
+        <LoadingSpinner text="Cargando gestión de buses..." />
       </div>
     );
   }
@@ -228,7 +257,7 @@ export default function AdminBusesPage() {
         </div>
         <div className="flex gap-2 flex-wrap">
           <Link href="/chofer/bus/new">
-            <Button className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800">
+            <Button className="bg-gray-800 hover:bg-gray-700 dark:bg-gray-800 dark:hover:bg-gray-800 dark:text-white">
               Registrar Nuevo Bus
             </Button>
           </Link>
@@ -254,58 +283,83 @@ export default function AdminBusesPage() {
             {assignedBuses.map((bus) => (
               <Card
                 key={bus.id}
-                className="border-orange-200 dark:border-orange-900/50 bg-white dark:bg-gray-800"
+                className="border border-orange-200 dark:border-orange-900/50 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow"
               >
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
-                      <Bus className="w-5 h-5" />
+                      <Bus className="w-5 h-5 text-orange-600 dark:text-orange-400" />
                       Unidad {bus.unit_number}
                     </CardTitle>
-                    <Badge className="bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-200 border-orange-200 dark:border-orange-800">
+
+                    <Badge className="bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-200 border-orange-200 dark:border-orange-800 px-3 py-1 rounded-full">
                       Asignado
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3">
+
+                <CardContent className="space-y-4">
                   {bus.route && (
+                    <div className="flex items-start gap-3">
+                      <Map className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Ruta
+                        </p>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {bus.route}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-start gap-3">
+                    <Users className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
                     <div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Ruta
+                        Capacidad
                       </p>
                       <p className="font-medium text-gray-900 dark:text-white">
-                        {bus.route}
+                        {bus.capacity} pasajeros
                       </p>
                     </div>
-                  )}
-                  <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Capacidad
-                    </p>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {bus.capacity} pasajeros
-                    </p>
                   </div>
+
                   {bus.driver_email && (
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400 flex items-center gap-1">
-                        <User className="w-3 h-3" />
-                        Chofer
-                      </p>
-                      <p className="font-medium text-sm text-gray-900 dark:text-white">
-                        {bus.driver_email}
-                      </p>
+                    <div className="flex items-start gap-3">
+                      <User className="w-5 h-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Chofer
+                        </p>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {bus.driver_email}
+                        </p>
+                      </div>
                     </div>
                   )}
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="w-full mt-4 dark:bg-red-700 dark:hover:bg-red-800"
-                    onClick={() => handleUnassignBus(bus.id)}
-                  >
-                    <X className="w-4 h-4 mr-2" />
-                    Desasignar Bus
-                  </Button>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 dark:border-gray-600"
+                      onClick={() => router.push(`/admin/buses/${bus.id}/edit`)}
+                    >
+                      <Edit className="w-4 h-4" />
+                      Editar
+                    </Button>
+
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 dark:bg-red-700 dark:hover:bg-red-800"
+                      onClick={() => handleUnassignBus(bus.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Desasignar
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -338,48 +392,83 @@ export default function AdminBusesPage() {
             {availableBuses.map((bus) => (
               <Card
                 key={bus.id}
-                className="border-green-200 dark:border-green-900/50 bg-white dark:bg-gray-800"
+                className="border border-green-200 dark:border-green-900/50 bg-white dark:bg-gray-800 rounded-xl shadow-sm hover:shadow-md transition-shadow"
               >
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-white">
-                      <Bus className="w-5 h-5" />
+                      <Bus className="w-5 h-5 text-green-600 dark:text-green-400" />
                       Unidad {bus.unit_number}
                     </CardTitle>
-                    <Badge className="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-200 border-green-200 dark:border-green-800">
+
+                    <Badge className="bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-200 border-green-200 dark:border-green-800 px-3 py-1 rounded-full">
                       Disponible
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-3">
+
+                <CardContent className="space-y-4">
                   {bus.route && (
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Ruta
-                      </p>
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {bus.route}
-                      </p>
+                    <div className="flex items-start gap-3">
+                      <Map className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Ruta
+                        </p>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {bus.route}
+                        </p>
+                      </div>
                     </div>
                   )}
-                  <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Capacidad
-                    </p>
-                    <p className="font-medium text-gray-900 dark:text-white">
-                      {bus.capacity} pasajeros
-                    </p>
+
+                  <div className="flex items-start gap-3">
+                    <Users className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        Capacidad
+                      </p>
+                      <p className="font-medium text-gray-900 dark:text-white">
+                        {bus.capacity} pasajeros
+                      </p>
+                    </div>
                   </div>
+
                   {bus.schedule && (
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Horario
-                      </p>
-                      <p className="font-medium text-gray-900 dark:text-white">
-                        {bus.schedule}
-                      </p>
+                    <div className="flex items-start gap-3">
+                      <Clock className="w-5 h-5 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Horario
+                        </p>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {bus.schedule}
+                        </p>
+                      </div>
                     </div>
                   )}
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 dark:border-gray-600"
+                      onClick={() => router.push(`/admin/buses/${bus.id}/edit`)}
+                    >
+                      <Edit className="w-4 h-4" />
+                      Editar
+                    </Button>
+
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 dark:bg-red-700 dark:hover:bg-red-800"
+                      onClick={() => handleDeleteBus(bus.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Eliminar
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}

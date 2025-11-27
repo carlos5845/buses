@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import DriverTracker from "./components/DriverTracker";
 import { useEffect, useState } from "react";
+import { LoadingSpinner } from "@/components/loading-spinner";
 import { useRouter } from "next/navigation";
 
 type BusInfo = {
@@ -146,7 +147,7 @@ export default function ChoferPage() {
   if (loading) {
     return (
       <div className=" p-4 flex items-center justify-center">
-        <p className="font-bold ">Cargando...</p>
+        <LoadingSpinner text="Cargando panel del conductor..." />
       </div>
     );
   }
@@ -158,8 +159,8 @@ export default function ChoferPage() {
   const busId = busInfo?.id || null;
 
   return (
-    <div className="  p-4">
-      <div className="max-w-2xl mx-auto pt-8 space-y-6">
+    <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
@@ -191,25 +192,31 @@ export default function ChoferPage() {
         </div>
 
         {/* Status Card */}
-        <Card className="p-6 bg-card border-border shadow-lg">
+        <Card className="p-6 bg-card border-border shadow-lg w-full max-w-3xl mx-auto">
           {!busId ? (
-            <div className="space-y-4">
-              <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 flex items-start gap-2">
-                <AlertCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 bg-primary/10 border border-primary/20 rounded-lg p-4">
+              {/* Icono */}
+              <div className="flex-shrink-0">
+                <AlertCircle className="w-6 h-6 text-primary" />
+              </div>
+
+              {/* Texto + Botón */}
+              <div className="flex flex-col gap-3">
                 <div>
-                  <p className="font-medium text-primary mb-1">
+                  <p className="font-semibold text-primary">
                     No tienes un bus asignado
                   </p>
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-sm text-muted-foreground mt-1">
                     Selecciona un bus disponible para comenzar a compartir tu
                     ubicación en tiempo real.
                   </p>
-                  <Link href="/chofer/bus/select">
-                    <Button className="w-full sm:w-auto">
-                      Seleccionar Bus Disponible
-                    </Button>
-                  </Link>
                 </div>
+
+                <Link href="/chofer/bus/select" className="w-full sm:w-max">
+                  <Button className="w-full sm:w-auto">
+                    Seleccionar Bus Disponible
+                  </Button>
+                </Link>
               </div>
             </div>
           ) : (

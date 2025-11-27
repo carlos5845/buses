@@ -126,10 +126,10 @@ export default function Content() {
   };
 
   return (
-    <section className="relative overflow-hidden max-w-7xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 border border-gray-200 dark:border-gray-800 rounded-3xl mt-2 mr-auto ml-auto w-full shadow-xl">
+    <section className="relative overflow-hidden w-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-950 border border-gray-200 dark:border-gray-800 rounded-3xl mt-2 shadow-xl">
       {/* Contenedor principal */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6 max-w-7xl w-full">
-        {/* Mapa - Ocupa 3 columnas en pantallas grandes */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 p-4 sm:p-6 w-full">
+        {/* Mapa - Ocupa todas las columnas en móvil, 3 en desktop */}
         <div className="lg:col-span-3 rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800">
           <MapView />
         </div>
@@ -139,10 +139,10 @@ export default function Content() {
           <div className="sticky top-6">
             <div className="mb-4">
               <RollingText
-                className="text-3xl font-semibold"
+                className="text-2xl sm:text-3xl font-semibold"
                 text="Buses Activos"
               />
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 {loading
                   ? "Cargando..."
                   : `${activeBuses.length} bus${

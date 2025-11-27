@@ -10,7 +10,7 @@ export default function Home() {
   const mapSectionRef = useRef<HTMLDivElement>(null);
 
   const scrollToMap = () => {
-    if (mapSectionRef.current && typeof window !== 'undefined') {
+    if (mapSectionRef.current && typeof window !== "undefined") {
       const headerOffset = 100; // Altura del header + margen
       const elementPosition = mapSectionRef.current.getBoundingClientRect().top;
       const offsetPosition =
@@ -24,7 +24,7 @@ export default function Home() {
   };
 
   return (
-    <div className="font-sans min-h-screen">
+    <div className="font-sans min-h-screen w-full">
       <Header />
       {/* Landing Page */}
       <LandingPage onViewMap={scrollToMap} />

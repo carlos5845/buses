@@ -67,8 +67,8 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
   ];
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
+    if (typeof window === "undefined") return;
+
     const handleScroll = () => {
       if (scrollIndicatorRef.current) {
         const scrolled = window.scrollY;
@@ -98,10 +98,10 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       </div>
 
       {/* Contenido principal */}
-      <div className="relative z-10 max-w-6xl mx-auto text-center space-y-8 py-8">
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 mx-auto text-center space-y-6 sm:space-y-8 py-8">
         {/* Título principal */}
         <div className="animate-fade-in">
-          <div className="z-10 flex  items-center justify-center">
+          <div className="z-10 flex items-center justify-center">
             <div
               className={cn(
                 "group rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
@@ -113,20 +113,20 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
               </AnimatedShinyText>
             </div>
           </div>
-          <h1 className="pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10">
+          <h1 className="pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-3xl sm:text-5xl lg:text-8xl leading-tight sm:leading-snug lg:leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10 break-words">
             Sistema de
-            <span className="block pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-8xl leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10">
+            <span className="block pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-3xl sm:text-5xl lg:text-8xl leading-tight sm:leading-snug lg:leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10 break-words">
               Rastreo de Buses
             </span>
           </h1>
-          <p className="text-xl sm:text-2xl text-gray-700 dark:text-gray-500 max-w-3xl mx-auto">
+          <p className="text-base sm:text-xl lg:text-2xl text-gray-700 dark:text-gray-500 max-w-3xl mx-auto px-2">
             Monitorea la ubicación de tus buses en tiempo real. Ubicación
             precisa, actualizaciones instantáneas y seguimiento confiable.
           </p>
         </div>
 
         {/* Botones de acción */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4 px-2">
           <button onClick={onViewMap}>
             <RainbowButton variant={"outline"} size={"lg"}>
               Ver Mapa en Tiempo Real
@@ -139,14 +139,14 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
         </div>
 
         {/* Características destacadas */}
-        <BentoGrid className="mt-16">
+        <BentoGrid className="mt-8 sm:mt-12 lg:mt-16 px-2">
           {features.map((feature, idx) => (
             <BentoCard key={idx} {...feature} />
           ))}
         </BentoGrid>
 
         {/* Estadísticas rápidas con scroll de texto */}
-        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-12">
+        <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-8 sm:mt-12 px-2">
           <ScrollVelocityContainer className="text-4xl font-bold tracking-[-0.02em] md:text-7xl md:leading-[5rem]">
             <ScrollVelocityRow baseVelocity={5} direction={1}>
               Sistema de Rastreo • Buses en Tiempo Real •

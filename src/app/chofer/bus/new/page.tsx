@@ -14,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { LoadingSpinner } from "@/components/loading-spinner";
 
 export default function NewBusPage() {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
@@ -94,7 +95,7 @@ export default function NewBusPage() {
   if (loading) {
     return (
       <div className="max-w-lg mx-auto mt-10 p-6">
-        <p>Cargando...</p>
+        <LoadingSpinner text="Verificando permisos..." />
       </div>
     );
   }

@@ -1,24 +1,40 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
-import { Mail, User, Calendar } from "lucide-react";
+import { Mail, User, Calendar, Shield } from "lucide-react";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { createClient } from "@/utils/supabase/client";
 
 interface UserProfileProps {
-  user?: {
-    id: string;
-    email?: string;
-    user_metadata?: {
-      full_name?: string;
-      avatar_url?: string;
-      [key: string]: string | undefined;
-    };
-    created_at?: string;
-    last_sign_in_at?: string;
-  };
+  user?: SupabaseUser | null;
 }
 
 export function UserProfile({ user }: UserProfileProps) {
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const supabase = createClient();
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+
+      setUserRole(profile?.role || null);
+      setLoading(false);
+    };
+
+    fetchUserRole();
+  }, [user]);
+
   if (!user) {
     return (
       <Card className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 border border-gray-200 dark:border-gray-700">
@@ -41,6 +57,24 @@ export function UserProfile({ user }: UserProfileProps) {
 
         {/* Información del Usuario */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Rol */}
+          {!loading && userRole && (
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-purple-100 dark:bg-purple-900/30">
+                  <Shield className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Rol
+                </p>
+                <p className="text-base font-semibold text-gray-900 dark:text-white">
+                  {userRole}
+                </p>
+              </div>
+            </div>
+          )}
           {/* Email */}
           <div className="flex items-start gap-4">
             <div className="flex-shrink-0">
@@ -76,23 +110,6 @@ export function UserProfile({ user }: UserProfileProps) {
               </div>
             </div>
           )}
-
-          {/* ID del Usuario */}
-          <div className="flex items-start gap-4">
-            <div className="flex-shrink-0">
-              <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-purple-100 dark:bg-purple-900/30">
-                <User className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-              </div>
-            </div>
-            <div className="flex-1">
-              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                ID del Usuario
-              </p>
-              <p className="text-sm font-mono text-gray-900 dark:text-white break-all">
-                {user.id.substring(0, 20)}...
-              </p>
-            </div>
-          </div>
 
           {/* Fecha de Creación */}
           {user.created_at && (

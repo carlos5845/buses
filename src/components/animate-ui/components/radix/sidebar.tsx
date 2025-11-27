@@ -95,8 +95,8 @@ function SidebarProvider({
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    
+    if (typeof window === "undefined") return;
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (
         event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
@@ -206,7 +206,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) !p-0 [&>button]:hidden !gap-0 flex flex-col overflow-hidden"
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -218,16 +218,23 @@ function Sidebar({
             <SheetTitle>Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
           </SheetHeader>
-          <Highlight
-            enabled={animateOnHover}
-            hover
-            controlledItems
-            mode="parent"
-            containerClassName={cn("h-full", containerClassName)}
-            transition={transition}
-          >
-            <div className="flex h-full w-full flex-col">{children}</div>
-          </Highlight>
+          <div className="flex flex-col flex-1 overflow-hidden">
+            <Highlight
+              enabled={animateOnHover}
+              hover
+              controlledItems
+              mode="parent"
+              containerClassName={cn(
+                "flex-1 overflow-y-auto",
+                containerClassName
+              )}
+              transition={transition}
+            >
+              <div className="flex flex-col flex-1 overflow-y-auto w-full">
+                {children}
+              </div>
+            </Highlight>
+          </div>
         </SheetContent>
       </Sheet>
     );
@@ -378,7 +385,7 @@ function SidebarHeader({ className, ...props }: SidebarHeaderProps) {
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2 p-2 md:p-2", className)}
       {...props}
     />
   );
@@ -391,7 +398,7 @@ function SidebarFooter({ className, ...props }: SidebarFooterProps) {
     <div
       data-slot="sidebar-footer"
       data-sidebar="footer"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2 p-2 md:p-2", className)}
       {...props}
     />
   );
@@ -418,7 +425,7 @@ function SidebarContent({ className, ...props }: SidebarContentProps) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden",
+        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-2 group-data-[collapsible=icon]:overflow-hidden md:p-2",
         className
       )}
       {...props}
@@ -433,7 +440,10 @@ function SidebarGroup({ className, ...props }: SidebarGroupProps) {
     <div
       data-slot="sidebar-group"
       data-sidebar="group"
-      className={cn("relative flex w-full min-w-0 flex-col p-2", className)}
+      className={cn(
+        "relative flex w-full min-w-0 flex-col p-2 md:p-2",
+        className
+      )}
       {...props}
     />
   );

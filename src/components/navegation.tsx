@@ -153,7 +153,7 @@ export const RadixSidebarDemo = ({
 
   return (
     <SidebarProvider>
-      <Sidebar collapsible="icon">
+      <Sidebar collapsible={isMobile ? "none" : "icon"}>
         <SidebarHeader>
           {/* Team Switcher */}
           <SidebarMenu>
