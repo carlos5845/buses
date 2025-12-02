@@ -140,7 +140,7 @@ export default function Content() {
             <div className="mb-4">
               <RollingText
                 className="text-2xl sm:text-3xl font-semibold"
-                text="Buses Activos"
+                text="Buses En Ruta"
               />
               <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 {loading

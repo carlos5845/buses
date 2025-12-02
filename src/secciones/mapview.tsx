@@ -43,8 +43,8 @@ type BusPath = {
   locations: Array<[number, number]>; // Array de [lat, lng] en orden cronológico
 };
 
-// Tiempo máximo sin actualizaciones para considerar un bus como inactivo (5 minutos)
-const INACTIVE_THRESHOLD_MS = 5 * 60 * 1000;
+// Tiempo máximo sin actualizaciones para considerar un bus como inactivo (1 minutos)
+const INACTIVE_THRESHOLD_MS = 1 * 60 * 1000;
 
 export default function MapView() {
   const [busLocations, setBusLocations] = useState<Map<string, BusLocation>>(
