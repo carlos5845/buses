@@ -5,7 +5,7 @@ import LandingPage from "@/secciones/components/LandingPage";
 import Content from "@/secciones/content";
 import Header from "@/secciones/header";
 import { useRef } from "react";
-
+import Hero from "@/secciones/components/hero";
 export default function Home() {
   const mapSectionRef = useRef<HTMLDivElement>(null);
 
@@ -24,67 +24,32 @@ export default function Home() {
   };
 
   return (
-    <div className="font-sans min-h-screen w-full">
+    <div className="font-sans w-full">
+      {/* ================= SECTION 1: HEADER ================= */}
       <Header />
-      {/* Landing Page */}
-      <LandingPage onViewMap={scrollToMap} />
 
-      {/* Sección del Mapa */}
-      <div
+      {/* ================= SECTION 2: HERO ================= */}
+      <section className="min-h-screen flex items-center justify-center ">
+        <Hero onViewMap={scrollToMap} />
+      </section>
+
+      {/* ================= SECTION 3: MAPA ================= */}
+      <section
         ref={mapSectionRef}
         id="map-section"
-        className="min-h-screen py-8 px-4 sm:px-6 lg:px-8"
+        className="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 "
       >
         <Content />
-      </div>
-      <div></div>
-      {/* Footer */}
-      <footer className="flex gap-[24px] flex-wrap items-center justify-center py-8 px-4 relative z-10 bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-600 dark:text-gray-400"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-600 dark:text-gray-400"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4 text-gray-600 dark:text-gray-400"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </section>
+
+      {/* ================= SECTION 4: LANDING PAGE ================= */}
+      <section className="min-h-screen flex items-center justify-center ">
+        <LandingPage onViewMap={scrollToMap} />
+      </section>
+
+      {/* ================= SECTION 5: FOOTER ================= */}
+      <footer className="w-full flex items-center justify-center py-10 px-4 relative bg-gray-50 dark:bg-black border-t border-gray-200 dark:border-gray-800">
+        <img src="/tapir.jpg" alt="tapir" width={190} />
       </footer>
     </div>
   );

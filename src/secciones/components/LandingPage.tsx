@@ -1,22 +1,17 @@
 "use client";
 
-import { RainbowButton } from "@/components/ui/rainbow-button";
-import { RetroGrid } from "@/components/ui/retro-grid";
 import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import {
   ScrollVelocityContainer,
   ScrollVelocityRow,
 } from "@/components/ui/scroll-based-velocity";
-import { cn } from "@/lib/utils";
-import { AnimatedShinyText } from "@/components/ui/animated-shiny-text";
-import { MapPin, Bus, Clock, Shield, ArrowRight } from "lucide-react";
+import { MapPin, Bus, Clock, Shield } from "lucide-react";
 import { useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
 interface LandingPageProps {
   onViewMap: () => void;
 }
 
-export default function LandingPage({ onViewMap }: LandingPageProps) {
+export default function LandingPage({}: LandingPageProps) {
   const scrollIndicatorRef = useRef<HTMLDivElement>(null);
 
   const features = [
@@ -24,7 +19,7 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       Icon: MapPin,
       name: "Ubicación en Tiempo Real",
       description: "Rastreo GPS en vivo de todos tus buses",
-      href: "#",
+      href: "https://github.com/carlos5845",
       cta: "Explorar",
       className: "col-span-3 lg:col-span-1",
       background: (
@@ -35,7 +30,7 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       Icon: Bus,
       name: "Múltiples Buses",
       description: "Visualiza y gestiona toda tu flota en un solo lugar",
-      href: "#",
+      href: "https://github.com/carlos5845",
       cta: "Saber más",
       className: "col-span-3 lg:col-span-2",
       background: (
@@ -46,7 +41,7 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       Icon: Clock,
       name: "Actualizaciones Instantáneas",
       description: "Datos en tiempo real cada segundo",
-      href: "#",
+      href: "https://github.com/carlos5845",
       cta: "Saber más",
       className: "col-span-3 lg:col-span-2",
       background: (
@@ -58,7 +53,7 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       name: "Seguridad Garantizada",
       description: "Autenticación y acceso basado en roles",
       className: "col-span-3 lg:col-span-1",
-      href: "#",
+      href: "https://github.com/carlos5845",
       cta: "Saber más",
       background: (
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-transparent" />
@@ -92,51 +87,9 @@ export default function LandingPage({ onViewMap }: LandingPageProps) {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(59,130,246,0.1),transparent_50%)]"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(139,92,246,0.1),transparent_50%)]"></div>*/}
 
-      {/* RetroGrid Fondo */}
-      <div className="absolute inset-0 z-0">
-        <RetroGrid />
-      </div>
-
       {/* Contenido principal */}
       <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8 mx-auto text-center space-y-6 sm:space-y-8 py-8">
         {/* Título principal */}
-        <div className="animate-fade-in">
-          <div className="z-10 flex items-center justify-center">
-            <div
-              className={cn(
-                "group rounded-full border border-black/5 bg-neutral-100 text-base text-white transition-all ease-in hover:cursor-pointer hover:bg-neutral-200 dark:border-white/5 dark:bg-neutral-900 dark:hover:bg-neutral-800"
-              )}
-            >
-              <AnimatedShinyText className="inline-flex items-center justify-center px-4 py-1 transition ease-out hover:text-neutral-600 hover:duration-300 hover:dark:text-neutral-400">
-                <span>✨Bus Traker UI</span>
-                <ArrowRight className="ml-1 size-3 transition-transform duration-300 ease-in-out group-hover:translate-x-0.5" />
-              </AnimatedShinyText>
-            </div>
-          </div>
-          <h1 className="pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-3xl sm:text-5xl lg:text-8xl leading-tight sm:leading-snug lg:leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10 break-words">
-            Sistema de
-            <span className="block pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-center text-3xl sm:text-5xl lg:text-8xl leading-tight sm:leading-snug lg:leading-none font-semibold whitespace-pre-wrap text-transparent dark:from-white dark:to-slate-900/10 break-words">
-              Rastreo de Buses
-            </span>
-          </h1>
-          <p className="text-base sm:text-xl lg:text-2xl text-gray-700 dark:text-gray-500 max-w-3xl mx-auto px-2">
-            Monitorea la ubicación de tus buses en tiempo real. Ubicación
-            precisa, actualizaciones instantáneas y seguimiento confiable.
-          </p>
-        </div>
-
-        {/* Botones de acción */}
-        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-2 sm:pt-4 px-2">
-          <button onClick={onViewMap}>
-            <RainbowButton variant={"outline"} size={"lg"}>
-              Ver Mapa en Tiempo Real
-            </RainbowButton>
-          </button>
-
-          <Button onClick={onViewMap} size={"lg"}>
-            Explorar Rutas
-          </Button>
-        </div>
 
         {/* Características destacadas */}
         <BentoGrid className="mt-8 sm:mt-12 lg:mt-16 px-2">

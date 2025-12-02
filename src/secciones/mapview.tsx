@@ -260,7 +260,7 @@ export default function MapView() {
   return (
     <div className="h-[80vh] w-full relative z-10">
       <MapContainer
-        center={[-12.0464, -77.0428]} // Lima como centro inicial
+        center={[-15.8402, -70.0219]} // Lima como centro inicial
         zoom={13}
         className="h-full w-full rounded-xl shadow-lg"
       >
@@ -353,28 +353,49 @@ export default function MapView() {
                 icon={customIcon}
               >
                 <Popup>
-                  <div>
-                    <strong>🚌 Bus:</strong> {location.unit_number} <br />
-                    <strong>📍 Ruta:</strong> {location.route || "No asignada"}{" "}
-                    <br />
-                    <strong>👥 Capacidad:</strong> {location.capacity} <br />
-                    <strong>🕐 Última actualización:</strong>{" "}
-                    {new Date(location.recorded_at).toLocaleTimeString()}
+                  <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">🚌 Bus</span>
+                      <span className="font-medium">
+                        {location.unit_number}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">📍 Ruta</span>
+                      <span className="font-medium">
+                        {location.route || "No asignada"}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">👥 Capacidad</span>
+                      <span className="font-medium">{location.capacity}</span>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">🕐 Actualizado</span>
+                      <span className="font-medium">
+                        {new Date(location.recorded_at).toLocaleTimeString()}
+                      </span>
+                    </div>
+
                     {minutesAgo > 0 && (
-                      <>
-                        <br />
-                        <span className="text-xs text-muted-foreground">
-                          ({minutesAgo} min. atrás)
-                        </span>
-                      </>
+                      <p className="text-xs text-muted-foreground text-right">
+                        ({minutesAgo} min atrás)
+                      </p>
                     )}
-                    <br />
-                    <strong>📍 Puntos registrados:</strong>{" "}
-                    {path?.locations.length || 0}
-                    <br />
-                    <span className="text-xs text-green-600 font-semibold">
+
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">📍 Puntos</span>
+                      <span className="font-medium">
+                        {path?.locations.length || 0}
+                      </span>
+                    </div>
+
+                    <div className="pt-2 text-xs text-green-600 font-semibold text-right">
                       🟢 Activo
-                    </span>
+                    </div>
                   </div>
                 </Popup>
               </Marker>
