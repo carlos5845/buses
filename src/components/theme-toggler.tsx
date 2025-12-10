@@ -29,7 +29,7 @@ export const ThemeTogglerDemo = ({ direction }: ThemeTogglerDemoProps) => {
         return (
           <button
             onClick={() => toggleTheme(nextTheme)}
-            className="inline-flex items-center justify-center h-10 w-10 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-slate-800 hover:bg-gray-200 dark:hover:bg-slate-700 transition text-gray-900 dark:text-white"
+            className="inline-flex items-center justify-center h-11 w-11 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-black  transition text-gray-900 dark:text-white"
             aria-label="Toggle theme"
             title={`Tema actual: ${effective}`}
           >

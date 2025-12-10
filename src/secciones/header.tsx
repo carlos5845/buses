@@ -33,16 +33,16 @@ export default function Header() {
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm"></nav>
           <div className="flex items-center gap-3">
-            <ThemeTogglerDemo direction="ltr" />
             <Link
               href="Auth/login"
-              className="inline-flex items-center gap-2 rounded-2xl bg-white text-gray-900 px-3 py-2 text-sm font-medium hover:bg-gray-100 transition font-sans dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
+              className="inline-flex items-center gap-2 rounded-2xl bg-white text-gray-900 px-3 py-2 text-sm font-medium hover:bg-gray-100 border border-gray-500 transition font-sans dark:bg-black dark:text-white dark:hover:bg-white dark:hover:text-black"
             >
               <AnimateIcon animateOnHover>
                 <ExternalLink width={20} />
               </AnimateIcon>
               Acceso como chofer
             </Link>
+            <ThemeTogglerDemo direction="ltr" />
           </div>
         </div>
       </div>

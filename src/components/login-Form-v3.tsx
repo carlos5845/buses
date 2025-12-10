@@ -76,7 +76,7 @@ export function LoginFormV3({
               href="#"
               className="ml-auto text-sm underline-offset-4 hover:underline"
             >
-              Olvidaste tu contraseña?
+              {/* Olvidaste tu contraseña? */}
             </a>
           </div>
           <Input
@@ -97,26 +97,33 @@ export function LoginFormV3({
 
         <Field>
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Iniciando sesión..." : "Login"}
+            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
           </Button>
         </Field>
 
         <FieldDescription className="text-center">
-          Don&apos;t have an account?{" "}
-          <a href="#" className="underline underline-offset-4">
-            Sign up
-          </a>
+          ¿No tienes una cuenta?{" "}
+          <button
+            onClick={() =>
+              alert(
+                "Para crear una cuenta, contacte con el administrador del sistema."
+              )
+            }
+            className="underline underline-offset-4 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            Obtener una Cuenta
+          </button>
         </FieldDescription>
       </FieldGroup>
 
       <div className="text-muted-foreground text-center text-xs">
-        By clicking continue, you agree to our{" "}
+        Al hacer clic en Continuar, aceptas nuestras{" "}
         <a href="#" className="underline underline-offset-4 hover:text-primary">
-          Terms of Service
+          Términos de servicio
         </a>{" "}
-        and{" "}
+        y{" "}
         <a href="#" className="underline underline-offset-4 hover:text-primary">
-          Privacy Policy
+          política de privacidad
         </a>
         .
       </div>

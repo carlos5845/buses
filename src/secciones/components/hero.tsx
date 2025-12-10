@@ -37,7 +37,7 @@ export default function Hero({ onViewMap }: HeroProps) {
           </div>
 
           {/* Título */}
-          <h1 className="pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-3xl sm:text-5xl lg:text-8xl font-semibold  text-transparent dark:from-white dark:to-slate-900/10 whitespace-pre-wrap break-words mt-4    ">
+          <h1 className="pointer-events-none bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-4xl sm:text-5xl lg:text-8xl font-semibold  text-transparent dark:from-white dark:to-slate-900/10 whitespace-pre-wrap break-words mt-4    ">
             Sistema de
             <span className="block bg-gradient-to-b from-black to-gray-300/80 bg-clip-text text-transparent dark:from-white dark:to-slate-900/10">
               Rastreo de Buses
