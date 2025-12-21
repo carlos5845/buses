@@ -53,11 +53,9 @@ export default function Hero({ onViewMap }: HeroProps) {
 
         {/* Botones */}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center pt-4 px-2">
-          <button onClick={onViewMap}>
-            <RainbowButton variant="outline" size="lg">
-              Ver Mapa en Tiempo Real
-            </RainbowButton>
-          </button>
+          <RainbowButton variant="outline" size="lg" onClick={onViewMap}>
+            Ver Mapa en Tiempo Real
+          </RainbowButton>
 
           <Button onClick={onViewMap} size="lg">
             Explorar Rutas
