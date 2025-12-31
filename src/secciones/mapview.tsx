@@ -52,8 +52,48 @@ export default function MapView() {
   );
   const [busPaths, setBusPaths] = useState<Map<string, BusPath>>(new Map());
 
+  // Umbral para considerar que una sesión de manejo ha terminado (20 minutos)
+  // Si hay una brecha mayor a esto, no unimos los puntos con una línea
+  const SESSION_GAP_THRESHOLD_MS = 20 * 60 * 1000;
+
   useEffect(() => {
     const supabase = createClient();
+
+    // Función auxiliar para filtrar solo los puntos de la sesión actual
+    const filterCurrentSessionPoints = (
+      points: { lat: number; lng: number; recorded_at: string }[]
+    ): [number, number][] => {
+      if (points.length === 0) return [];
+
+      // Ordenar por fecha descendente (más nuevo primero) para procesar hacia atrás
+      const sortedPoints = [...points].sort(
+        (a, b) =>
+          new Date(b.recorded_at).getTime() - new Date(a.recorded_at).getTime()
+      );
+
+      const currentSessionPoints: [number, number][] = [];
+      let lastTime = new Date(sortedPoints[0].recorded_at).getTime();
+
+      // Agregar el punto más reciente
+      currentSessionPoints.push([sortedPoints[0].lat, sortedPoints[0].lng]);
+
+      // Iterar hacia atrás y detenerse si encontramos un hueco grande
+      for (let i = 1; i < sortedPoints.length; i++) {
+        const pointTime = new Date(sortedPoints[i].recorded_at).getTime();
+        const timeDiff = lastTime - pointTime;
+
+        if (timeDiff > SESSION_GAP_THRESHOLD_MS) {
+          // Se encontró una brecha grande, detenemos aquí para no unir con sesiones anteriores
+          break;
+        }
+
+        currentSessionPoints.push([sortedPoints[i].lat, sortedPoints[i].lng]);
+        lastTime = pointTime;
+      }
+
+      // Devolver los puntos en orden cronológico (antiguo -> nuevo) para que Leaflet dibuje bien
+      return currentSessionPoints.reverse();
+    };
 
     // 🔹 Obtener buses con sus últimas ubicaciones y recorridos
     const fetchBusLocations = async () => {
@@ -89,16 +129,14 @@ export default function MapView() {
           .select("lat, lng, recorded_at")
           .eq("bus_id", bus.id)
           .gte("recorded_at", today.toISOString())
-          .order("recorded_at", { ascending: true });
+          .order("recorded_at", { ascending: true }); // Orden ascendente para la lógica normal
 
         if (locError || !lastLocation) {
           return null;
         }
 
-        // Crear array de coordenadas para el recorrido en orden cronológico
-        // Leaflet espera [lat, lng]
-        const pathCoords: Array<[number, number]> =
-          pathLocations?.map((loc) => [loc.lat, loc.lng]) || [];
+        // Filtrar puntos para obtener solo la sesión actual
+        const validPathCoords = filterCurrentSessionPoints(pathLocations || []);
 
         // Verificar si el bus está activo (última actualización reciente)
         const lastUpdateTime = new Date(lastLocation.recorded_at).getTime();
@@ -121,7 +159,7 @@ export default function MapView() {
             unit_number: bus.unit_number,
             route: bus.route,
             capacity: bus.capacity,
-            locations: pathCoords,
+            locations: validPathCoords,
           },
         };
       });
@@ -132,9 +170,12 @@ export default function MapView() {
 
       results.forEach((result) => {
         if (result) {
-          locationsMap.set(result.lastLocation.bus_id, result.lastLocation);
-          if (result.path.locations.length > 0) {
-            pathsMap.set(result.path.bus_id, result.path);
+          // Solo agregar si está activo o ha estado activo recientemente
+          if (result.lastLocation.isActive) {
+            locationsMap.set(result.lastLocation.bus_id, result.lastLocation);
+            if (result.path.locations.length > 0) {
+              pathsMap.set(result.path.bus_id, result.path);
+            }
           }
         }
       });
@@ -191,31 +232,37 @@ export default function MapView() {
               return updated;
             });
 
-            // Actualizar recorrido agregando la nueva ubicación al final (orden cronológico)
+            // Actualizar recorrido
             setBusPaths((prev) => {
               const updated = new Map(prev);
               const existingPath = updated.get(newLocation.bus_id);
 
+              let newLocations: [number, number][] = [];
+
               if (existingPath) {
-                // Crear nuevo array con la nueva ubicación al final para mantener el orden
-                const newLocations: Array<[number, number]> = [
+                // Verificar si el último punto fue hace mucho tiempo (nueva sesión)
+                const lastPointIndex = existingPath.locations.length - 1;
+                // No tenemos la fecha del último punto en `locations` (solo lat,lng),
+                // pero podemos inferir que si el bus ya estaba en el mapa, es parte de la sesión.
+                // Sin embargo, para ser robustos, si el bus se reactiva después de horas,
+                // deberíamos resetear el path.
+                // Como gestionamos la limpieza con `setInterval`, si el bus desapareció y volvió,
+                // el path se habrá borrado. Así que simplemente agregamos.
+                newLocations = [
                   ...existingPath.locations,
-                  [newLocation.lat, newLocation.lng] as [number, number],
+                  [newLocation.lat, newLocation.lng],
                 ];
-                updated.set(newLocation.bus_id, {
-                  ...existingPath,
-                  locations: newLocations,
-                });
               } else {
-                // Crear nuevo recorrido
-                updated.set(newLocation.bus_id, {
-                  bus_id: newLocation.bus_id,
-                  unit_number: bus.unit_number,
-                  route: bus.route,
-                  capacity: bus.capacity,
-                  locations: [[newLocation.lat, newLocation.lng]],
-                });
+                newLocations = [[newLocation.lat, newLocation.lng]];
               }
+
+              updated.set(newLocation.bus_id, {
+                bus_id: newLocation.bus_id,
+                unit_number: bus.unit_number,
+                route: bus.route,
+                capacity: bus.capacity,
+                locations: newLocations,
+              });
 
               return updated;
             });
@@ -226,30 +273,41 @@ export default function MapView() {
 
     // Verificar periódicamente qué buses están inactivos
     const checkInactiveBuses = setInterval(() => {
-      setBusLocations((prev) => {
-        const updated = new Map(prev);
-        const now = Date.now();
+      const now = Date.now();
+      let locationsUpdated = false;
+      let pathsUpdated = false;
 
-        prev.forEach((location, busId) => {
+      // Usamos los setters con función para acceder al estado más reciente
+      setBusLocations((prevLocations) => {
+        const nextLocations = new Map(prevLocations);
+        const busesToRemove: string[] = [];
+
+        nextLocations.forEach((location, busId) => {
           const lastUpdateTime = new Date(location.recorded_at).getTime();
           const timeSinceUpdate = now - lastUpdateTime;
 
           if (timeSinceUpdate >= INACTIVE_THRESHOLD_MS) {
-            // Marcar como inactivo o eliminar
-            updated.delete(busId);
-
-            // También limpiar el recorrido del bus inactivo
-            setBusPaths((prevPaths) => {
-              const updatedPaths = new Map(prevPaths);
-              updatedPaths.delete(busId);
-              return updatedPaths;
-            });
+            busesToRemove.push(busId);
           }
         });
 
-        return updated;
+        if (busesToRemove.length > 0) {
+          locationsUpdated = true;
+          busesToRemove.forEach((id) => nextLocations.delete(id));
+
+          // Si borramos locations, TAMBIÉN borramos paths
+          if (locationsUpdated) {
+            setBusPaths((prevPaths) => {
+              const nextPaths = new Map(prevPaths);
+              busesToRemove.forEach((id) => nextPaths.delete(id));
+              return nextPaths;
+            });
+          }
+        }
+
+        return locationsUpdated ? nextLocations : prevLocations;
       });
-    }, 30000); // Verificar cada 30 segundos
+    }, 5000); // Verificar cada 5 segundos (más frecuente para mejor UX)
 
     return () => {
       supabase.removeChannel(channel);
@@ -302,34 +360,27 @@ export default function MapView() {
         })}
 
         {/* Marcadores de buses en tiempo real - Solo mostrar buses activos */}
-        {Array.from(busLocations.values())
-          .filter((location) => {
-            // Filtrar solo buses activos (con actualizaciones recientes)
-            const lastUpdateTime = new Date(location.recorded_at).getTime();
-            const now = Date.now();
-            return now - lastUpdateTime < INACTIVE_THRESHOLD_MS;
-          })
-          .map((location) => {
-            // Color del marcador basado en el bus_id
-            const colors = [
-              "#FF0000",
-              "#0000FF",
-              "#00FF00",
-              "#FF00FF",
-              "#00FFFF",
-              "#FFFF00",
-              "#FFA500",
-              "#800080",
-            ];
-            const colorIndex =
-              parseInt(location.bus_id.replace(/-/g, "").substring(0, 8), 16) %
-              colors.length;
-            const markerColor = colors[colorIndex];
+        {Array.from(busLocations.values()).map((location) => {
+          // Color del marcador basado en el bus_id
+          const colors = [
+            "#FF0000",
+            "#0000FF",
+            "#00FF00",
+            "#FF00FF",
+            "#00FFFF",
+            "#FFFF00",
+            "#FFA500",
+            "#800080",
+          ];
+          const colorIndex =
+            parseInt(location.bus_id.replace(/-/g, "").substring(0, 8), 16) %
+            colors.length;
+          const markerColor = colors[colorIndex];
 
-            // Crear icono personalizado con color
-            const customIcon = L.divIcon({
-              className: "custom-bus-marker",
-              html: `<div style="
+          // Crear icono personalizado con color
+          const customIcon = L.divIcon({
+            className: "custom-bus-marker",
+            html: `<div style="
                 background-color: ${markerColor};
                 width: 20px;
                 height: 20px;
@@ -337,70 +388,68 @@ export default function MapView() {
                 border: 3px solid white;
                 box-shadow: 0 2px 4px rgba(0,0,0,0.3);
               "></div>`,
-              iconSize: [20, 20],
-              iconAnchor: [10, 10],
-            });
+            iconSize: [20, 20],
+            iconAnchor: [10, 10],
+          });
 
-            const path = busPaths.get(location.bus_id);
-            const timeSinceUpdate =
-              Date.now() - new Date(location.recorded_at).getTime();
-            const minutesAgo = Math.floor(timeSinceUpdate / 60000);
+          const path = busPaths.get(location.bus_id);
+          const timeSinceUpdate =
+            Date.now() - new Date(location.recorded_at).getTime();
+          const minutesAgo = Math.floor(timeSinceUpdate / 60000);
 
-            return (
-              <Marker
-                key={location.bus_id}
-                position={[location.lat, location.lng]}
-                icon={customIcon}
-              >
-                <Popup>
-                  <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">🚌 Bus</span>
-                      <span className="font-medium">
-                        {location.unit_number}
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">📍 Ruta</span>
-                      <span className="font-medium">
-                        {location.route || "No asignada"}
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">👥 Capacidad</span>
-                      <span className="font-medium">{location.capacity}</span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">🕐 Actualizado</span>
-                      <span className="font-medium">
-                        {new Date(location.recorded_at).toLocaleTimeString()}
-                      </span>
-                    </div>
-
-                    {minutesAgo > 0 && (
-                      <p className="text-xs text-muted-foreground text-right">
-                        ({minutesAgo} min atrás)
-                      </p>
-                    )}
-
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">📍 Puntos</span>
-                      <span className="font-medium">
-                        {path?.locations.length || 0}
-                      </span>
-                    </div>
-
-                    <div className="pt-2 text-xs text-green-600 font-semibold text-right">
-                      🟢 Activo
-                    </div>
+          return (
+            <Marker
+              key={location.bus_id}
+              position={[location.lat, location.lng]}
+              icon={customIcon}
+            >
+              <Popup>
+                <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">🚌 Bus</span>
+                    <span className="font-medium">{location.unit_number}</span>
                   </div>
-                </Popup>
-              </Marker>
-            );
-          })}
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">📍 Ruta</span>
+                    <span className="font-medium">
+                      {location.route || "No asignada"}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">👥 Capacidad</span>
+                    <span className="font-medium">{location.capacity}</span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">🕐 Actualizado</span>
+                    <span className="font-medium">
+                      {new Date(location.recorded_at).toLocaleTimeString()}
+                    </span>
+                  </div>
+
+                  {minutesAgo > 0 && (
+                    <p className="text-xs text-muted-foreground text-right">
+                      ({minutesAgo} min atrás)
+                    </p>
+                  )}
+
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">📍 Puntos</span>
+                    <span className="font-medium">
+                      {path?.locations.length || 0}
+                    </span>
+                  </div>
+
+                  <div className="pt-2 text-xs text-green-600 font-semibold text-right">
+                    🟢 Activo
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
       </MapContainer>
     </div>
   );
